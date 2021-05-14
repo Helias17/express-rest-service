@@ -1,23 +1,36 @@
 const usersRepo = require('./user.memory.repository');
 const User = require('./user.model');
 
-const getAll = async () => usersRepo.users.map(User.toResponse);
+const getAllUsers = async () => {
+  const users = await usersRepo.getAllUsers();
+  return users;
+}
 
 const createUser = async (name, login, password) => {
-  const newUser = new User(name, login, password);
-  usersRepo.users.push(newUser);
-  return User.toResponse(newUser);
+  const createdUser = await usersRepo.createUser(name, login, password);
+  return createdUser;
 };
 
 const getUserById = async (id) => {
-  const foundUser = usersRepo.users.find( user => {
-    console.log('user.id', user.id);
-    console.log('id', id);
-    return user.id === id;
-  });
-  console.log(foundUser);
+  const foundUser = await usersRepo.getUserById(id);
   return foundUser ? User.toResponse(foundUser) : null;
 };
 
+const deleteUser = async (id) => {
+  const isUserDeleted = await usersRepo.deleteUser(id);
+  return isUserDeleted;
+};
 
-module.exports = { getAll, createUser, getUserById };
+const updateUser = async (id, userInfo) => {
+  const updatedUser = await usersRepo.updateUser(id, userInfo);
+  return updatedUser;
+};
+
+
+module.exports = { 
+  getAllUsers, 
+  createUser, 
+  getUserById, 
+  deleteUser,
+  updateUser,
+ };
