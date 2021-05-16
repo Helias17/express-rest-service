@@ -1,7 +1,7 @@
-const boards = [];
 const Board = require('./board.model');
 const BoardColumn = require('./boardColumn.model');
 
+let boards = [];
 
 const createBoard = async ({title, columns}) => {
   const columnsWithId = columns.map( column => new BoardColumn(column))
@@ -10,38 +10,57 @@ const createBoard = async ({title, columns}) => {
   return newBoard;
 }
 
-/* 
-const getAllUsers = async () => users.map(User.toResponse);
+
+const getAllBoards = async () => boards;
 
 
-const getUserById = async (id) => users.find( user => user.id === id)
+const getBoardById = async (id) => boards.find( board => board.id === id)
 
-const deleteUser = async (id) => {
-  let isUserDeleted = false;
-  users = users.filter( user => {
-    if (user.id !== id) {
-      return true;
-    }
-    isUserDeleted = true;
-    return false;
-  } );
 
-  return isUserDeleted;
-}
+const updateBoard = async (id, boardInfo) => {
 
-const updateUser = async (id, userInfo) => {
-  const userArrIndex = users.findIndex( item => item.id === id );
-  if (userArrIndex >= 0) {
-    users[userArrIndex].name = userInfo.name;
-    users[userArrIndex].login = userInfo.login;
-    users[userArrIndex].password = userInfo.password;
-    return User.toResponse(users[userArrIndex]);
+  const updateColumns = (board, columnsUpdateArr) => {
+    columnsUpdateArr.forEach( column => {
+      const columnForUpdate = board.columns.find( columnOld => columnOld.id === column.id);
+      columnForUpdate.title = column.title;
+      columnForUpdate.order = column.order;
+    })
+  }
+
+  const boardArrIndex = boards.findIndex( item => item.id === id );
+  if (boardArrIndex >= 0) {
+    boards[boardArrIndex].title = boardInfo.title;
+    updateColumns(boards[boardArrIndex], boardInfo.columns);
+    return boards[boardArrIndex];
   }    
   return null;
 }
 
- */
+
+const deleteBoard = async (id) => {
+  let isBoardDeleted = false;
+  boards = boards.filter( board => {
+    if (board.id !== id) {
+      return true;
+    }
+    isBoardDeleted = true;
+    return false;
+  } );
+
+  return isBoardDeleted;
+}
+
+
+
+
+
+
+
 
 module.exports = { 
   createBoard,
+  getAllBoards,
+  getBoardById,
+  updateBoard,
+  deleteBoard
 };

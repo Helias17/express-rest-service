@@ -7,28 +7,36 @@ const createBoard = async (boardInfo) => {
   return createdBoard;
 };
 
-/* 
-const getAllUsers = async () => {
-  const users = await usersRepo.getAllUsers();
-  return users;
+
+const getAllBoards = async () => {
+  const boards = await boardsRepo.getAllBoards();
+  return boards;
 }
 
-const getUserById = async (id) => {
-  const foundUser = await usersRepo.getUserById(id);
-  return foundUser ? User.toResponse(foundUser) : null;
+
+const getBoardById = async (id) => {
+  const foundBoard = await boardsRepo.getBoardById(id);
+  return foundBoard || null;
 };
 
-const deleteUser = async (id) => {
-  const isUserDeleted = await usersRepo.deleteUser(id);
-  return isUserDeleted;
+const updateBoard = async (id, boardInfo) => {
+  const updatedBoard = await boardsRepo.updateBoard(id, boardInfo);
+  return updatedBoard;
 };
 
-const updateUser = async (id, userInfo) => {
-  const updatedUser = await usersRepo.updateUser(id, userInfo);
-  return updatedUser;
+
+const deleteBoard = async (id) => {
+  const isBoardDeleted = await boardsRepo.deleteBoard(id);
+  return isBoardDeleted;
 };
- */
+
+
+
 
 module.exports = { 
   createBoard,
+  getAllBoards,
+  getBoardById,
+  updateBoard,
+  deleteBoard
  };
