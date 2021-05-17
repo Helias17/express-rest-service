@@ -32,12 +32,9 @@ router.route('/:id').delete(async (req, res) => {
 router.route('/:id').put(async (req, res) => {
   const {id} = req.params;
   const userInfo  = req.body;
-  console.log(id);
-  console.log(userInfo);
 
   const updatedUser = await usersService.updateUser(id, userInfo);
   if (updatedUser) {
-    console.log(updatedUser);
     res.status(200).json(updatedUser);
   } else {
     res.status(400).send('Bad request');
