@@ -1,5 +1,5 @@
 const boardsRepo = require('./board.memory.repository');
-// const Board = require('./board.model');
+const tasksService = require('../tasks/task.service');
 
 
 const createBoard = async (boardInfo) => {
@@ -27,10 +27,11 @@ const updateBoard = async (id, boardInfo) => {
 
 const deleteBoard = async (id) => {
   const isBoardDeleted = await boardsRepo.deleteBoard(id);
+  if (isBoardDeleted) {
+    await tasksService.deleteTasksByBoardId(id);
+  }
   return isBoardDeleted;
 };
-
-
 
 
 module.exports = { 

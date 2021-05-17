@@ -8,32 +8,43 @@ const createTask = async (id, task) => {
   return createdTask;
 };
 
-
 const getTasksByBoardId = async (id) => {
   const foundTasks = await tasksRepo.getTasksByBoardId(id);
   return foundTasks.length ? foundTasks : null;
 };
 
-/* 
-const getAllUsers = async () => {
-  const users = await usersRepo.getAllUsers();
-  return users;
-}
-
-
-
-const deleteUser = async (id) => {
-  const isUserDeleted = await usersRepo.deleteUser(id);
-  return isUserDeleted;
+const getTaskByBoardIdTaskId = async (boardId, taskId) => {
+  const foundTask = await tasksRepo.getTaskByBoardIdTaskId(boardId, taskId);
+  return foundTask || null;
 };
 
-const updateUser = async (id, userInfo) => {
-  const updatedUser = await usersRepo.updateUser(id, userInfo);
-  return updatedUser;
+const updateTask = async (boardId, taskId, taskInfo) => {
+  const updatedTask = await tasksRepo.updateTask(boardId, taskId, taskInfo);
+  return updatedTask;
 };
 
- */
+
+const deleteTask = async (boardId, taskId) => {
+  const isTaskDeleted = await tasksRepo.deleteTask(boardId, taskId);
+  return isTaskDeleted || null;
+};
+
+const deleteTasksByBoardId = async (boardId) => {
+  const isTasksDeleted = await tasksRepo.deleteTasksByBoardId(boardId);
+  return isTasksDeleted || null;
+};
+
+const updateTasksAfterUserDeleted = async (userId) => {
+  await tasksRepo.updateTasksAfterUserDeleted(userId);
+};
+
+
 module.exports = { 
   createTask,
   getTasksByBoardId,
+  getTaskByBoardIdTaskId,
+  updateTask,
+  deleteTask,
+  updateTasksAfterUserDeleted,
+  deleteTasksByBoardId
  };

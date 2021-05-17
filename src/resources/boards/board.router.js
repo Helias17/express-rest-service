@@ -24,8 +24,10 @@ router.route('/:id').put(async (req, res) => {
 router.route('/:id').delete(async (req, res) => {
   const isBoardDeleted = await boardsService.deleteBoard(req.params.id);
   if (isBoardDeleted) {
+    console.log('The board has been deleted');
     res.status(204).send('The board has been deleted');
   } else {
+    console.log('Board not found');
     res.status(404).send('Board not found');
   }
 

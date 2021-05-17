@@ -1,4 +1,5 @@
 const usersRepo = require('./user.memory.repository');
+const tasksService = require('../tasks/task.service');
 const User = require('./user.model');
 
 const getAllUsers = async () => {
@@ -18,6 +19,10 @@ const getUserById = async (id) => {
 
 const deleteUser = async (id) => {
   const isUserDeleted = await usersRepo.deleteUser(id);
+
+  if (isUserDeleted) {
+    await tasksService.updateTasksAfterUserDeleted(id);
+  }
   return isUserDeleted;
 };
 

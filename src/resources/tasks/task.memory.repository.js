@@ -1,6 +1,6 @@
 const Task = require('./task.model');
 
-const tasks = [];
+let tasks = [];
 
 const createTask = async (task) => {
   const newTask = new Task(task);
@@ -8,41 +8,72 @@ const createTask = async (task) => {
   return newTask;
 }
 
-const getTasksByBoardId = async (id) => tasks.filter( task => task.boardId === id)
+const getTasksByBoardId = async (id) => tasks.filter( task => task.boardId === id);
 
-/* 
-const getAllUsers = async () => users.map(User.toResponse);
+const getTaskByBoardIdTaskId = async (boardId, taskId) => tasks.find( 
+  task => (task.boardId === boardId && task.id === taskId)
+)
 
+const updateTask = async (boardId, taskId, taskInfo) => {
+  const updateTaskIndex = tasks.findIndex( task => (task.boardId === boardId && task.id === taskId) );
 
+  if (updateTaskIndex >= 0) {
+    tasks[updateTaskIndex] = {...tasks[updateTaskIndex], ...taskInfo};
+    return tasks[updateTaskIndex];
 
-
-const deleteUser = async (id) => {
-  let isUserDeleted = false;
-  users = users.filter( user => {
-    if (user.id !== id) {
-      return true;
-    }
-    isUserDeleted = true;
-    return false;
-  } );
-
-  return isUserDeleted;
-}
-
-const updateUser = async (id, userInfo) => {
-  const userArrIndex = users.findIndex( item => item.id === id );
-  if (userArrIndex >= 0) {
-    users[userArrIndex].name = userInfo.name;
-    users[userArrIndex].login = userInfo.login;
-    users[userArrIndex].password = userInfo.password;
-    return User.toResponse(users[userArrIndex]);
-  }    
+  }
+  
   return null;
 }
 
- */
+
+const deleteTask = async (boardId, taskId) => {
+  let isTaskDeleted = false;
+  tasks = tasks.filter( task => {
+    if (task.id === taskId && task.boardId === boardId ) {
+      isTaskDeleted = true;
+      return false;
+    }
+
+    return true;
+  } );
+
+  return isTaskDeleted;
+}
+
+const deleteTasksByBoardId = async (boardId) => {
+  console.log('tasks before board delete: ', tasks, boardId);
+  let isTasksDeleted = false;
+  tasks = tasks.filter( task => {
+    if (task.boardId === boardId ) {
+      isTasksDeleted = true;
+      return false;
+    }
+    return true;
+  } );
+
+  console.log('tasks AFTER board delete: ', tasks);
+
+  return isTasksDeleted;
+}
+
+const updateTasksAfterUserDeleted = async (userId) => {
+  tasks.forEach( task => {
+    const taskObj = task;
+    if (task.userId === userId) {
+      taskObj.userId = null;
+    }
+  } );
+ 
+}
+
 
 module.exports = { 
   createTask,
   getTasksByBoardId,
+  getTaskByBoardIdTaskId,
+  updateTask,
+  deleteTask,
+  updateTasksAfterUserDeleted,
+  deleteTasksByBoardId
 };

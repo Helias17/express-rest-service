@@ -40,11 +40,13 @@ const updateBoard = async (id, boardInfo) => {
 const deleteBoard = async (id) => {
   let isBoardDeleted = false;
   boards = boards.filter( board => {
-    if (board.id !== id) {
-      return true;
+
+    if (board.id === id) {
+      isBoardDeleted = true;
+      return false;
     }
-    isBoardDeleted = true;
-    return false;
+
+    return true;
   } );
 
   return isBoardDeleted;
