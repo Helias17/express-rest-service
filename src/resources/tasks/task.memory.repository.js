@@ -20,7 +20,6 @@ const updateTask = async (boardId, taskId, taskInfo) => {
   if (updateTaskIndex >= 0) {
     tasks[updateTaskIndex] = {...tasks[updateTaskIndex], ...taskInfo};
     return tasks[updateTaskIndex];
-
   }
   
   return null;
@@ -42,7 +41,7 @@ const deleteTask = async (boardId, taskId) => {
 }
 
 const deleteTasksByBoardId = async (boardId) => {
-  console.log('tasks before board delete: ', tasks, boardId);
+
   let isTasksDeleted = false;
   tasks = tasks.filter( task => {
     if (task.boardId === boardId ) {
@@ -51,8 +50,6 @@ const deleteTasksByBoardId = async (boardId) => {
     }
     return true;
   } );
-
-  console.log('tasks AFTER board delete: ', tasks);
 
   return isTasksDeleted;
 }
@@ -64,7 +61,6 @@ const updateTasksAfterUserDeleted = async (userId) => {
       taskObj.userId = null;
     }
   } );
- 
 }
 
 

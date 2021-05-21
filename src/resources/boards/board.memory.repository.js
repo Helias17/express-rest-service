@@ -38,6 +38,9 @@ const updateBoard = async (id, boardInfo) => {
 
 
 const deleteBoard = async (id) => {
+  const boardIndex = boards.findIndex(board => board.id === id);
+  if (boardIndex < 0) return false;
+
   let isBoardDeleted = false;
   boards = boards.filter( board => {
 
@@ -51,13 +54,6 @@ const deleteBoard = async (id) => {
 
   return isBoardDeleted;
 }
-
-
-
-
-
-
-
 
 module.exports = { 
   createBoard,
