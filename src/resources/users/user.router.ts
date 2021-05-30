@@ -1,8 +1,9 @@
-import { Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 import { IUser } from "../../interfaces/IUser";
 
-const router = require('express').Router();
 const usersService = require('./user.service');
+
+const router = Router();
 
 router.route('/').get(async (_req: Request, res: Response) => {
   const users: IUser[] = await usersService.getAllUsers();

@@ -6,7 +6,7 @@ const tasksRepo = require('./task.memory.repository');
  * @param {Object} task - task info
  * @returns {Object} createdTask - created task
 */
-const createTask = async (id: number, task: ITask) => {
+const createTask = async (id: string, task: ITask) => {
   const taskInfo = { ...task, boardId: id };
   const createdTask = await tasksRepo.createTask(taskInfo);
   return createdTask;
@@ -17,7 +17,7 @@ const createTask = async (id: number, task: ITask) => {
  * @param {number} id - board's id
  * @returns {array|null} array of found tasks or null
 */
-const getTasksByBoardId = async (id: number) => {
+const getTasksByBoardId = async (id: string) => {
   const foundTasks = await tasksRepo.getTasksByBoardId(id);
   return foundTasks.length ? foundTasks : null;
 };
@@ -74,7 +74,7 @@ const updateTasksAfterUserDeleted = async (userId: string) => {
   await tasksRepo.updateTasksAfterUserDeleted(userId);
 };
 
-
+/* 
 module.exports = {
   createTask,
   getTasksByBoardId,
@@ -84,3 +84,14 @@ module.exports = {
   updateTasksAfterUserDeleted,
   deleteTasksByBoardId
 };
+ */
+
+export {
+  createTask,
+  getTasksByBoardId,
+  getTaskByBoardIdTaskId,
+  updateTask,
+  deleteTask,
+  updateTasksAfterUserDeleted,
+  deleteTasksByBoardId
+}

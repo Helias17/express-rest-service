@@ -2,6 +2,7 @@ import { IUser } from './../../interfaces/IUser';
 
 const User = require('./user.model');
 
+
 let users: IUser[] = [];
 
 /** get all users

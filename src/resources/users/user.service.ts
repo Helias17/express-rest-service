@@ -1,7 +1,6 @@
 import { IUser } from "../../interfaces/IUser";
-
+import * as tasksService from '../tasks/task.service';
 const usersRepo = require('./user.memory.repository');
-const tasksService = require('../tasks/task.service');
 const User = require('./user.model');
 
 
@@ -41,7 +40,7 @@ const getUserById = async (id: number) => {
  * @param {id} id - user's id
  * @returns {boolean} return true, if user was succesfully deleted, else - return false
 */
-const deleteUser = async (id: number) => {
+const deleteUser = async (id: string) => {
   const isUserDeleted = await usersRepo.deleteUser(id);
 
   if (isUserDeleted) {

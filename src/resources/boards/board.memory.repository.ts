@@ -1,6 +1,5 @@
 import { IColumn } from './../../interfaces/IColumn';
 import { IBoard } from './../../interfaces/IBoard';
-
 const Board = require('./board.model');
 const BoardColumn = require('./boardColumn.model');
 
@@ -13,7 +12,7 @@ let boards: IBoard[] = [];
  * @returns {Object} newBoard - created board instance
 */
 const createBoard = async ({ title, columns }: { title: string, columns: IColumn[] }) => {
-  const columnsWithId = columns.map(column => new BoardColumn(column))
+  const columnsWithId = columns.map(column => new BoardColumn(column));
   const newBoard = new Board({ title, columnsWithId });
   boards.push(newBoard);
   return newBoard;
@@ -88,6 +87,7 @@ const deleteBoard = async (id: string) => {
   return isBoardDeleted;
 }
 
+
 module.exports = {
   createBoard,
   getAllBoards,
@@ -95,3 +95,4 @@ module.exports = {
   updateBoard,
   deleteBoard
 };
+

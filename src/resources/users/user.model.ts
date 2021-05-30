@@ -1,6 +1,5 @@
 import { IUser } from "../../interfaces/IUser";
-
-const uuid = require('uuid');
+import { v4 as uuidv4 } from 'uuid';
 
 class User {
   id: string;
@@ -12,7 +11,7 @@ class User {
   password: string;
 
   constructor({
-    id = uuid.v4(),
+    id = uuidv4(),
     name = 'USER',
     login = 'user',
     password = 'P@55w0rd'

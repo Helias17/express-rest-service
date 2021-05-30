@@ -1,11 +1,15 @@
-import { Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
+import * as tasksService from './task.service';
 
-const router = require('express').Router();
-const tasksService = require('./task.service');
+const router = Router();
 
 router.route('/:id/tasks').post(async (req: Request, res: Response) => {
+  if (!req.params['id']) {
+    res.status(404).send('Wrong ID');
+  }
 
-  const createdTask = await tasksService.createTask(req.params['id'], req.body);
+  const createdTask = await tasksService.createTask(req.params['id']!, req.body);
+
   if (createdTask) {
     res.status(201).json(createdTask);
   } else {
@@ -14,7 +18,11 @@ router.route('/:id/tasks').post(async (req: Request, res: Response) => {
 });
 
 router.route('/:id/tasks').get(async (req: Request, res: Response) => {
-  const tasks = await tasksService.getTasksByBoardId(req.params['id']);
+  if (!req.params['id']) {
+    res.status(404).send('Wrong ID');
+  }
+
+  const tasks = await tasksService.getTasksByBoardId(req.params['id']!);
   if (tasks.length) {
     res.status(200).json(tasks);
   } else {
@@ -23,7 +31,11 @@ router.route('/:id/tasks').get(async (req: Request, res: Response) => {
 });
 
 router.route('/:boardId/tasks/:taskId').get(async (req: Request, res: Response) => {
-  const task = await tasksService.getTaskByBoardIdTaskId(req.params['boardId'], req.params['taskId']);
+  if (!req.params['boardId'] || !req.params['taskId']) {
+    res.status(404).send('Wrong boardId or taskId');
+  }
+
+  const task = await tasksService.getTaskByBoardIdTaskId(req.params['boardId']!, req.params['taskId']!);
 
   if (task) {
     res.status(200).json(task);
@@ -34,7 +46,11 @@ router.route('/:boardId/tasks/:taskId').get(async (req: Request, res: Response) 
 
 
 router.route('/:boardId/tasks/:taskId').put(async (req: Request, res: Response) => {
-  const task = await tasksService.updateTask(req.params['boardId'], req.params['taskId'], req.body);
+  if (!req.params['boardId'] || !req.params['taskId']) {
+    res.status(404).send('Wrong boardId or taskId');
+  }
+
+  const task = await tasksService.updateTask(req.params['boardId']!, req.params['taskId']!, req.body);
 
   if (task) {
     res.status(200).json(task);
@@ -44,7 +60,10 @@ router.route('/:boardId/tasks/:taskId').put(async (req: Request, res: Response) 
 });
 
 router.route('/:boardId/tasks/:taskId').delete(async (req: Request, res: Response) => {
-  const isTaskDeleted = await tasksService.deleteTask(req.params['boardId'], req.params['taskId']);
+  if (!req.params['boardId'] || !req.params['taskId']) {
+    res.status(404).send('Wrong boardId or taskId');
+  }
+  const isTaskDeleted = await tasksService.deleteTask(req.params['boardId']!, req.params['taskId']!);
   if (isTaskDeleted) {
     res.status(200).send('OK');
   } else {
