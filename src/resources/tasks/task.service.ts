@@ -1,3 +1,4 @@
+import { ITask } from '../../interfaces/ITask';
 const tasksRepo = require('./task.memory.repository');
 
 
@@ -5,8 +6,8 @@ const tasksRepo = require('./task.memory.repository');
  * @param {Object} task - task info
  * @returns {Object} createdTask - created task
 */
-const createTask = async (id, task) => {
-  const taskInfo  = {...task, boardId: id};
+const createTask = async (id: number, task: ITask) => {
+  const taskInfo = { ...task, boardId: id };
   const createdTask = await tasksRepo.createTask(taskInfo);
   return createdTask;
 };
@@ -16,7 +17,7 @@ const createTask = async (id, task) => {
  * @param {number} id - board's id
  * @returns {array|null} array of found tasks or null
 */
-const getTasksByBoardId = async (id) => {
+const getTasksByBoardId = async (id: number) => {
   const foundTasks = await tasksRepo.getTasksByBoardId(id);
   return foundTasks.length ? foundTasks : null;
 };
@@ -27,7 +28,7 @@ const getTasksByBoardId = async (id) => {
  * @param {number} taskId - task's id
  * @returns {Object|null} found task or null
 */
-const getTaskByBoardIdTaskId = async (boardId, taskId) => {
+const getTaskByBoardIdTaskId = async (boardId: string, taskId: string) => {
   const foundTask = await tasksRepo.getTaskByBoardIdTaskId(boardId, taskId);
   return foundTask || null;
 };
@@ -39,7 +40,7 @@ const getTaskByBoardIdTaskId = async (boardId, taskId) => {
  * @param {Object} taskInfo - data to update task
  * @returns {Object} updatedTask - updated task
 */
-const updateTask = async (boardId, taskId, taskInfo) => {
+const updateTask = async (boardId: string, taskId: string, taskInfo: ITask) => {
   const updatedTask = await tasksRepo.updateTask(boardId, taskId, taskInfo);
   return updatedTask;
 };
@@ -50,7 +51,7 @@ const updateTask = async (boardId, taskId, taskInfo) => {
  * @param {number} taskId - task's id
  * @returns {boolean} if task was succesfully deleted, return true, else - null
 */
-const deleteTask = async (boardId, taskId) => {
+const deleteTask = async (boardId: string, taskId: string) => {
   const isTaskDeleted = await tasksRepo.deleteTask(boardId, taskId);
   return isTaskDeleted || null;
 };
@@ -60,7 +61,7 @@ const deleteTask = async (boardId, taskId) => {
  * @param {number} boardId - board's id
  * @returns {boolean} if tasks were succesfully deleted, return true, else - false
 */
-const deleteTasksByBoardId = async (boardId) => {
+const deleteTasksByBoardId = async (boardId: string) => {
   const isTasksDeleted = await tasksRepo.deleteTasksByBoardId(boardId);
   return isTasksDeleted;
 };
@@ -69,12 +70,12 @@ const deleteTasksByBoardId = async (boardId) => {
 /** update tasks after user was deleted
  * @param {number} userId - user's id
 */
-const updateTasksAfterUserDeleted = async (userId) => {
+const updateTasksAfterUserDeleted = async (userId: string) => {
   await tasksRepo.updateTasksAfterUserDeleted(userId);
 };
 
 
-module.exports = { 
+module.exports = {
   createTask,
   getTasksByBoardId,
   getTaskByBoardIdTaskId,
@@ -82,4 +83,4 @@ module.exports = {
   deleteTask,
   updateTasksAfterUserDeleted,
   deleteTasksByBoardId
- };
+};

@@ -1,8 +1,12 @@
-const uuid = require('uuid');
+import { v4 as uuidv4 } from 'uuid';
 
 class BoardColumn {
+  id: string;
+  title: string;
+  order: number;
+
   constructor({
-    id = uuid.v4(),
+    id = uuidv4(),
     title = 'Column Title',
     order = 0
   }) {

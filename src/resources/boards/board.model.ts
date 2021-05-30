@@ -1,8 +1,14 @@
-const uuid = require('uuid');
+import { IColumn } from './../../interfaces/IColumn';
+import { v4 as uuidv4 } from 'uuid';
+
 
 class Board {
+  id: string;
+  title: string;
+  columns: IColumn[] | null;
+
   constructor({
-    id = uuid.v4(),
+    id = uuidv4(),
     title = 'Board Title',
     columnsWithId = [],
   }) {

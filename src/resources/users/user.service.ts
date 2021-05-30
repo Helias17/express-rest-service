@@ -1,3 +1,5 @@
+import { IUser } from "../../interfaces/IUser";
+
 const usersRepo = require('./user.memory.repository');
 const tasksService = require('../tasks/task.service');
 const User = require('./user.model');
@@ -19,7 +21,7 @@ const getAllUsers = async () => {
  * @param {string} password - user's password
  * @returns {Object|undefined} return created user instance, if user was not found return undefined
 */
-const createUser = async (name, login, password) => {
+const createUser = async (name: string, login: string, password: string) => {
   const createdUser = await usersRepo.createUser(name, login, password);
   return createdUser;
 };
@@ -29,7 +31,7 @@ const createUser = async (name, login, password) => {
  * @param {id} id - user's id
  * @returns {Object|null} return user instance, if user was not found return null
 */
-const getUserById = async (id) => {
+const getUserById = async (id: number) => {
   const foundUser = await usersRepo.getUserById(id);
   return foundUser ? User.toResponse(foundUser) : null;
 };
@@ -39,7 +41,7 @@ const getUserById = async (id) => {
  * @param {id} id - user's id
  * @returns {boolean} return true, if user was succesfully deleted, else - return false
 */
-const deleteUser = async (id) => {
+const deleteUser = async (id: number) => {
   const isUserDeleted = await usersRepo.deleteUser(id);
 
   if (isUserDeleted) {
@@ -54,16 +56,16 @@ const deleteUser = async (id) => {
  * @param {userInfo} userInfo - data to update user
  * @returns {Object|null} updatedUser - return updated user or null, if user wasn't found
 */
-const updateUser = async (id, userInfo) => {
+const updateUser = async (id: number, userInfo: IUser) => {
   const updatedUser = await usersRepo.updateUser(id, userInfo);
   return updatedUser;
 };
 
 
-module.exports = { 
-  getAllUsers, 
-  createUser, 
-  getUserById, 
+module.exports = {
+  getAllUsers,
+  createUser,
+  getUserById,
   deleteUser,
   updateUser,
- };
+};
