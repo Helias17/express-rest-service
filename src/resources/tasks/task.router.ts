@@ -1,11 +1,13 @@
-import { Request, Response, Router } from 'express';
+import { Request, Response, Router, NextFunction } from 'express';
 import * as tasksService from './task.service';
+import { ErrorHandler } from '../../services/errors/ErrorHandler';
 
 const router = Router();
 
-router.route('/:id/tasks').post(async (req: Request, res: Response) => {
+router.route('/:id/tasks').post(async (req: Request, res: Response, next: NextFunction) => {
   if (!req.params['id']) {
-    res.status(404).send('Wrong ID');
+    const err = new ErrorHandler(404, 'Wrong ID');
+    next(err);
   }
 
   const createdTask = await tasksService.createTask(req.params['id']!, req.body);
@@ -13,26 +15,30 @@ router.route('/:id/tasks').post(async (req: Request, res: Response) => {
   if (createdTask) {
     res.status(201).json(createdTask);
   } else {
-    res.status(404).send('Bad request');
+    const err = new ErrorHandler(404, 'Bad request');
+    next(err);
   }
 });
 
-router.route('/:id/tasks').get(async (req: Request, res: Response) => {
+router.route('/:id/tasks').get(async (req: Request, res: Response, next: NextFunction) => {
   if (!req.params['id']) {
-    res.status(404).send('Wrong ID');
+    const err = new ErrorHandler(404, 'Wrong ID');
+    next(err);
   }
 
   const tasks = await tasksService.getTasksByBoardId(req.params['id']!);
   if (tasks.length) {
     res.status(200).json(tasks);
   } else {
-    res.status(404).send('Tasks not found');
+    const err = new ErrorHandler(404, 'Tasks not found');
+    next(err);
   }
 });
 
-router.route('/:boardId/tasks/:taskId').get(async (req: Request, res: Response) => {
+router.route('/:boardId/tasks/:taskId').get(async (req: Request, res: Response, next: NextFunction) => {
   if (!req.params['boardId'] || !req.params['taskId']) {
-    res.status(404).send('Wrong boardId or taskId');
+    const err = new ErrorHandler(404, 'Wrong boardId or taskId');
+    next(err);
   }
 
   const task = await tasksService.getTaskByBoardIdTaskId(req.params['boardId']!, req.params['taskId']!);
@@ -40,14 +46,16 @@ router.route('/:boardId/tasks/:taskId').get(async (req: Request, res: Response) 
   if (task) {
     res.status(200).json(task);
   } else {
-    res.status(404).send('Task not found');
+    const err = new ErrorHandler(404, 'Task not found');
+    next(err);
   }
 });
 
 
-router.route('/:boardId/tasks/:taskId').put(async (req: Request, res: Response) => {
+router.route('/:boardId/tasks/:taskId').put(async (req: Request, res: Response, next: NextFunction) => {
   if (!req.params['boardId'] || !req.params['taskId']) {
-    res.status(404).send('Wrong boardId or taskId');
+    const err = new ErrorHandler(404, 'Wrong boardId or taskId');
+    next(err);
   }
 
   const task = await tasksService.updateTask(req.params['boardId']!, req.params['taskId']!, req.body);
@@ -55,19 +63,23 @@ router.route('/:boardId/tasks/:taskId').put(async (req: Request, res: Response) 
   if (task) {
     res.status(200).json(task);
   } else {
-    res.status(404).send('Task not found');
+    const err = new ErrorHandler(404, 'Task not found');
+    next(err);
   }
 });
 
-router.route('/:boardId/tasks/:taskId').delete(async (req: Request, res: Response) => {
+router.route('/:boardId/tasks/:taskId').delete(async (req: Request, res: Response, next: NextFunction) => {
   if (!req.params['boardId'] || !req.params['taskId']) {
-    res.status(404).send('Wrong boardId or taskId');
+    const err = new ErrorHandler(404, 'Wrong boardId or taskId');
+    next(err);
   }
   const isTaskDeleted = await tasksService.deleteTask(req.params['boardId']!, req.params['taskId']!);
   if (isTaskDeleted) {
     res.status(200).send('OK');
   } else {
     res.status(404).send('Task was not deleted');
+    const err = new ErrorHandler(404, 'Task was not deleted');
+    next(err);
   }
 });
 

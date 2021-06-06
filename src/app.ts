@@ -6,7 +6,8 @@ import { userRouter } from './resources/users/user.router';
 import { boardRouter } from './resources/boards/board.router';
 import { taskRouter } from './resources/tasks/task.router';
 import { logRequest } from './middleware/logRequest';
-import { logger } from './services/logger'
+import { logger } from './services/logger';
+import { errorsMiddleware } from './middleware/errorsMiddleware';
 
 export const app = express();
 
@@ -30,6 +31,7 @@ app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 app.use('/boards', taskRouter);
 
+app.use(errorsMiddleware);
 
 process.on('uncaughtException', (err: Error) => {
   logger.log({ level: 'error', message: err.message, description: 'uncaught exception' });

@@ -1,5 +1,6 @@
-import { Request, Response, Router } from 'express';
+import { Request, Response, Router, NextFunction } from 'express';
 import { IUser } from "../../interfaces/IUser";
+import { ErrorHandler } from '../../services/errors/ErrorHandler';
 
 const usersService = require('./user.service');
 
@@ -10,30 +11,37 @@ router.route('/').get(async (_req: Request, res: Response) => {
   res.json(users);
 });
 
-router.route('/:id').get(async (req: Request, res: Response) => {
+router.route('/:id').get(async (req: Request, res: Response, next: NextFunction) => {
   const user = await usersService.getUserById(req.params['id']);
   if (user) {
     res.status(200).json(user);
   } else {
-    res.status(404).send('Not found');
+    const err = new ErrorHandler(404, `User with id ${req.params['id']} wasn't found`);
+    next(err);
   }
 });
 
-router.route('/').post(async (req: Request, res: Response) => {
+router.route('/').post(async (req: Request, res: Response, next: NextFunction) => {
   const createdUser = await usersService.createUser(req.body);
-  res.status(201).json(createdUser);
+  if (createdUser) {
+    res.status(201).json(createdUser);
+  } else {
+    const err = new ErrorHandler(400, `User wasn't created`);
+    next(err);
+  }
 });
 
-router.route('/:id').delete(async (req: Request, res: Response) => {
+router.route('/:id').delete(async (req: Request, res: Response, next: NextFunction) => {
   const isUserDeleted = await usersService.deleteUser(req.params['id']);
   if (isUserDeleted) {
     res.status(204).send('User deleted');
   } else {
-    res.status(404).send('User not found');
+    const err = new ErrorHandler(404, `User wasn't found`);
+    next(err);
   }
 });
 
-router.route('/:id').put(async (req: Request, res: Response) => {
+router.route('/:id').put(async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const userInfo = req.body;
 
@@ -41,7 +49,8 @@ router.route('/:id').put(async (req: Request, res: Response) => {
   if (updatedUser) {
     res.status(200).json(updatedUser);
   } else {
-    res.status(400).send('Bad request');
+    const err = new ErrorHandler(400, `Bad request`);
+    next(err);
   }
 });
 
