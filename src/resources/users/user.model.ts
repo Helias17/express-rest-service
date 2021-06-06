@@ -1,8 +1,17 @@
-const uuid = require('uuid');
+import { IUser } from "../../interfaces/IUser";
+import { v4 as uuidv4 } from 'uuid';
 
 class User {
+  id: string;
+
+  name: string;
+
+  login: string;
+
+  password: string;
+
   constructor({
-    id = uuid.v4(),
+    id = uuidv4(),
     name = 'USER',
     login = 'user',
     password = 'P@55w0rd'
@@ -13,7 +22,7 @@ class User {
     this.password = password;
   }
 
-  static toResponse(user) {
+  static toResponse(user: IUser) {
     const { id, name, login } = user;
     return { id, name, login };
   }
