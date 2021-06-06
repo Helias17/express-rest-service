@@ -1,3 +1,4 @@
+const nodemon = require('nodemon');
 import { default as express, Response, Request, NextFunction } from 'express';
 import swaggerUI from 'swagger-ui-express';
 import path from 'path';
@@ -6,6 +7,7 @@ import { userRouter } from './resources/users/user.router';
 import { boardRouter } from './resources/boards/board.router';
 import { taskRouter } from './resources/tasks/task.router';
 import { logRequest } from './middleware/logRequest';
+import { logger } from './services/logger'
 
 export const app = express();
 
@@ -29,5 +31,17 @@ app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 app.use('/boards', taskRouter);
 
+process.on('uncaughtException', (err: Error) => {
+
+  const afterNodemonExit = () => {
+    process.exit();
+  }
+  logger.log({ level: 'error', message: err.message, description: 'uncaught exception' });
+  nodemon.once('exit', afterNodemonExit).emit('quit');
+});
+
+
+
+//throw Error('Oops!');
 
 

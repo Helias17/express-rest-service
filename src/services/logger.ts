@@ -13,6 +13,9 @@ export const logger = winston.createLogger({
       filename: path.join('./', LOGS_FOLDER!, 'logInfo.txt'),
       level: 'info'
     }),
+  ],
+  exceptionHandlers: [
+    new winston.transports.File({ filename: path.join('./', LOGS_FOLDER!, 'uncaughtExceptions.txt') })
   ]
 });
 
