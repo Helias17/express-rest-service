@@ -1,20 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { isEmptyObject } from '../services/isEmptyObject';
-import { default as winston, format } from 'winston';
-
-
-
-const logger = winston.createLogger({
-  format: format.combine(
-    format.json(),
-    format.prettyPrint()
-  ),
-  transports: [
-    new winston.transports.Console()
-  ]
-});
+import { logger } from '../services/logger';
+import { checkLogsFolder } from '../services/checkLogsFolder';
 
 const createLog = (req: Request, res: Response): void => {
+  checkLogsFolder();
+
   const date = new Date();
   const logDate = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
 
