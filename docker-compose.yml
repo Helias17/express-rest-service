@@ -14,7 +14,9 @@ services:
     volumes:
       - ./logs:/usr/app/logs
       - ./src:/usr/app/src
-    restart: always
+    restart: on-failure
+    networks:
+      - docker-basics
   postgres:
     container_name: "postgres_bacics"
     image: postgres:alpine
@@ -24,4 +26,10 @@ services:
       - ./database:/var/lib/postgresql
     ports:
     - ${POSTGRES_PORT}:${POSTGRES_PORT}
-    restart: unless-stopped
+    networks:
+      - docker-basics
+    restart: on-failure
+
+networks:
+  docker-basics:
+    driver: bridge

@@ -8,9 +8,7 @@
   "description": "REST service starter for RS School",
   "main": "src/server.ts",
   "scripts": {
-    "start": "nodemon -L -e ts  --exec ts-node ./src/server.ts",
-    "docker:start": "docker compose up -d",
-    "docker:stop": "docker compose down",
+    "start": "nodemon -L -e ts --exitcrash --exec ts-node ./src/server.ts",
     "lint": "eslint --ext .js,.ts --fix src/",
     "jsdoc": "jsdoc -r ./src",
     "test": "cross-env DEBUG=rs:* jest --testMatch \"<rootDir>/test/e2e/test/*.test.js\" --noStackTrace --runInBand",

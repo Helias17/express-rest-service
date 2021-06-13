@@ -21,7 +21,7 @@ app.use(logRequest);
 
 app.use('/', (req: Request, res: Response, next: NextFunction) => {
   if (req.originalUrl === '/') {
-    res.send('Service is running!');
+    res.send('Service is running fast!');
     return;
   }
   next();
@@ -42,7 +42,7 @@ process.on('unhandledRejection', (err: Error) => {
   logger.log({ level: 'error', message: err.message, description: 'unhandled rejection' });
 })
 
-//throw new Error('Oops! uncaught Exception!');
+// throw new Error('Oops! uncaught Exception!');
 
 //Promise.reject(new Error('Oops! unhandledRejection!'));
 
