@@ -42,7 +42,6 @@ process.on('unhandledRejection', (err: Error) => {
   logger.log({ level: 'error', message: err.message, description: 'unhandled rejection' });
 })
 
-
 //throw new Error('Oops! uncaught Exception!');
 
 //Promise.reject(new Error('Oops! unhandledRejection!'));

@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  node-app:
+    container_name: "node-app-basics"
+    build: .
+    image: "x264co/docker-basics"
+    ports:
+      - ${PORT}:${PORT}
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    volumes:
+      - ./logs:/usr/app/logs
+      - ./src:/usr/app/src
+    restart: always
+  postgres:
+    container_name: "postgres_bacics"
+    image: postgres:alpine
+    env_file:
+      - .env
+    volumes:
+      - ./database:/var/lib/postgresql
+    ports:
+    - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    restart: unless-stopped
