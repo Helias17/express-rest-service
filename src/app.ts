@@ -43,7 +43,6 @@ process.on('unhandledRejection', (err: Error) => {
 })
 
 
-
 //throw new Error('Oops! uncaught Exception!');
 
 //Promise.reject(new Error('Oops! unhandledRejection!'));
