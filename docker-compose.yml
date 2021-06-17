@@ -17,8 +17,9 @@ services:
     restart: on-failure
     networks:
       - docker-basics
+
   postgres:
-    container_name: "postgres_bacics"
+    container_name: "postgres_basics"
     image: postgres:alpine
     env_file:
       - .env
@@ -29,6 +30,18 @@ services:
     networks:
       - docker-basics
     restart: on-failure
+
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    ports:
+      - 1111:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
 
 networks:
   docker-basics:
