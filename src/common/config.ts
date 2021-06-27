@@ -10,4 +10,9 @@ export const {
   NODE_ENV,
   JWT_SECRET_KEY,
   LOGS_FOLDER,
-  AUTH_MODE } = process.env;
+  AUTH_MODE,
+  POSTGRES_DB,
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_PORT
+} = process.env;

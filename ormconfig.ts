@@ -1,10 +1,12 @@
+import { POSTGRES_PORT, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB } from './src/common/config';
+
 export default {
   type: "postgres",
   host: "localhost",
-  port: process.env.POSTGRES_PORT,
-  username: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DB,
+  port: POSTGRES_PORT,
+  username: POSTGRES_USER,
+  password: POSTGRES_PASSWORD,
+  database: POSTGRES_DB,
   synchronize: false,
   logging: false,
   entities: [
@@ -14,7 +16,8 @@ export default {
     "src/db/migration/*.ts"
   ],
   cli: {
-    "migrationsDir": "src/db/migration"
+    "migrationsDir": "src/db/migration",
+    "entitiesDir": 'src/entity',
   },
   seeds: [
     "src/db/seeds/*.ts"
