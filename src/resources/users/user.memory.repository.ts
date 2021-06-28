@@ -1,5 +1,6 @@
 import { IUser } from './../../interfaces/IUser';
-
+import { getRepository } from 'typeorm';
+import UserEntity from '../../entity/User';
 const User = require('./user.model');
 
 
@@ -18,8 +19,10 @@ const getAllUsers = async () => users.map(User.toResponse);
  * @returns {Object|undefined} return created user instance, if user was not found return undefined
 */
 const createUser = async (name: string, login: string, password: string) => {
+  const userRepo = getRepository(UserEntity);
   const newUser = new User(name, login, password);
-  users.push(newUser);
+  //users.push(newUser);
+  await userRepo.save(newUser);
   return User.toResponse(newUser);
 }
 

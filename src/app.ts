@@ -1,13 +1,17 @@
 import { default as express, Response, Request, NextFunction } from 'express';
+import { createConnection } from 'typeorm';
 import swaggerUI from 'swagger-ui-express';
 import path from 'path';
 import YAML from 'yamljs';
+import cors from 'cors';
 import { userRouter } from './resources/users/user.router';
 import { boardRouter } from './resources/boards/board.router';
 import { taskRouter } from './resources/tasks/task.router';
 import { logRequest } from './middleware/logRequest';
 import { logger } from './services/logger';
 import { errorsMiddleware } from './middleware/errorsMiddleware';
+
+createConnection();
 
 export const app = express();
 
@@ -18,6 +22,7 @@ app.use(express.json());
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(logRequest);
+app.use(cors());
 
 app.use('/', (req: Request, res: Response, next: NextFunction) => {
   if (req.originalUrl === '/') {
