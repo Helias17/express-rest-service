@@ -1,4 +1,6 @@
+import { getRepository } from 'typeorm';
 import { ITask } from '../../interfaces/ITask';
+import TaskEntity from '../../entity/Task';
 const Task = require('./task.model');
 
 let tasks: ITask[] = [];
@@ -8,8 +10,9 @@ let tasks: ITask[] = [];
  * @returns {Object} newTask - created task
 */
 const createTask = async (task: ITask) => {
+  const taskRepo = getRepository(TaskEntity);
   const newTask = new Task(task);
-  tasks.push(newTask);
+  await taskRepo.save(newTask);
   return newTask;
 }
 
@@ -18,7 +21,11 @@ const createTask = async (task: ITask) => {
  * @param {number} id - board's id
  * @returns {array} array of found tasks
 */
-const getTasksByBoardId = async (id: string) => tasks.filter(task => task.boardId === id);
+const getTasksByBoardId = async (id: string) => {
+  const taskRepo = getRepository(TaskEntity);
+  const foundTasks = await taskRepo.find({ boardId: id });
+  return foundTasks;
+}
 
 
 /** get task by board id and task id
@@ -26,9 +33,11 @@ const getTasksByBoardId = async (id: string) => tasks.filter(task => task.boardI
  * @param {number} taskId - task's id
  * @returns {Object} found task
 */
-const getTaskByBoardIdTaskId = async (boardId: string, taskId: string) => tasks.find(
-  task => (task.boardId === boardId && task.id === taskId)
-)
+const getTaskByBoardIdTaskId = async (boardId: string, taskId: string) => {
+  const taskRepo = getRepository(TaskEntity);
+  const foundTask = await taskRepo.findOne({ 'boardId': boardId, id: taskId });
+  return foundTask;
+}
 
 
 /** update task info by task id and board id
@@ -38,11 +47,18 @@ const getTaskByBoardIdTaskId = async (boardId: string, taskId: string) => tasks.
  * @returns {Object} tasks[updateTaskIndex] - updated task
 */
 const updateTask = async (boardId: string, taskId: string, taskInfo: ITask) => {
-  const updateTaskIndex = tasks.findIndex(task => (task.boardId === boardId && task.id === taskId));
+  const taskRepo = getRepository(TaskEntity);
+  const foundTask = await taskRepo.findOne({ 'boardId': boardId, id: taskId });
 
-  if (updateTaskIndex >= 0) {
-    tasks[updateTaskIndex] = { ...tasks[updateTaskIndex], ...taskInfo };
-    return tasks[updateTaskIndex];
+  if (foundTask) {
+    foundTask.title = taskInfo.title;
+    foundTask.order = taskInfo.order;
+    foundTask.description = taskInfo.description;
+    foundTask.userId = taskInfo.userId!;
+    foundTask.boardId = taskInfo.boardId!;
+    foundTask.columnId = taskInfo.columnId!;
+    await taskRepo.save(foundTask);
+    return foundTask;
   }
 
   return null;
@@ -56,14 +72,14 @@ const updateTask = async (boardId: string, taskId: string, taskInfo: ITask) => {
 */
 const deleteTask = async (boardId: string, taskId: string) => {
   let isTaskDeleted = false;
-  tasks = tasks.filter(task => {
-    if (task.id === taskId && task.boardId === boardId) {
-      isTaskDeleted = true;
-      return false;
-    }
 
-    return true;
-  });
+  const taskRepo = getRepository(TaskEntity);
+  const foundTask = await taskRepo.findOne({ 'boardId': boardId, id: taskId });
+
+  if (foundTask) {
+    await taskRepo.remove(foundTask);
+    isTaskDeleted = true;
+  }
 
   return isTaskDeleted;
 }

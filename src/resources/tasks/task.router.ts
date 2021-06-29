@@ -27,7 +27,7 @@ router.route('/:id/tasks').get(async (req: Request, res: Response, next: NextFun
   }
 
   const tasks = await tasksService.getTasksByBoardId(req.params['id']!);
-  if (tasks.length) {
+  if (tasks && tasks.length) {
     res.status(200).json(tasks);
   } else {
     const err = new ErrorHandler(404, 'Tasks not found');

@@ -1,5 +1,7 @@
+import { getRepository } from 'typeorm';
 import { IColumn } from './../../interfaces/IColumn';
 import { IBoard } from './../../interfaces/IBoard';
+import { BoardEntity } from '../../entity/Board';
 const Board = require('./board.model');
 const BoardColumn = require('./boardColumn.model');
 
@@ -12,9 +14,15 @@ let boards: IBoard[] = [];
  * @returns {Object} newBoard - created board instance
 */
 const createBoard = async ({ title, columns }: { title: string, columns: IColumn[] }) => {
+
+  const boardRepo = getRepository(BoardEntity);
+
   const columnsWithId = columns.map(column => new BoardColumn(column));
+  console.log(columnsWithId);
   const newBoard = new Board({ title, columnsWithId });
-  boards.push(newBoard);
+  console.log(newBoard);
+  await boardRepo.save(newBoard);
+
   return newBoard;
 }
 

@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'; //, JoinColumn
 import { BoardEntity } from './Board';
 
 @Entity('Columns')
@@ -6,13 +6,15 @@ export class BoardColumnEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column()
+  @Column('text')
   title!: string;
 
-  @Column()
+  @Column({ type: 'int', nullable: true })
   order!: number;
 
-  @ManyToOne(() => BoardEntity, board => board.columns, { cascade: true })
-  @JoinColumn({ name: 'board_column' })
+  @ManyToOne(() => BoardEntity, board => board.columns, {
+    onDelete: 'CASCADE',
+  })
+  // @JoinColumn({ name: 'board_column' })
   board!: BoardEntity;
 }

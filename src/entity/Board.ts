@@ -9,6 +9,9 @@ export class BoardEntity {
   @Column()
   title!: string;
 
-  @OneToMany(() => BoardColumnEntity, column => column.board,)
+  @OneToMany(() => BoardColumnEntity, column => column.board, {
+    cascade: true,
+    eager: true,
+  })
   columns!: BoardColumnEntity[];
 }
