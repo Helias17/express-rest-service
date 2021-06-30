@@ -3,7 +3,6 @@ import { ITask } from '../../interfaces/ITask';
 import TaskEntity from '../../entity/Task';
 const Task = require('./task.model');
 
-let tasks: ITask[] = [];
 
 /** Create task
  * @param {Object} task - task info
@@ -92,14 +91,17 @@ const deleteTask = async (boardId: string, taskId: string) => {
 const deleteTasksByBoardId = async (boardId: string) => {
 
   let isTasksDeleted = false;
-  tasks = tasks.filter(task => {
-    if (task.boardId === boardId) {
-      isTasksDeleted = true;
-      return false;
-    }
-    return true;
-  });
 
+  const taskRepo = getRepository(TaskEntity);
+  const foundTasks = await taskRepo.find({ 'boardId': boardId });
+
+  if (foundTasks.length) {
+    const taskPromisesArr = foundTasks.map(async (task) => {
+      return await taskRepo.remove(task);
+    })
+    await Promise.all(taskPromisesArr);
+    isTasksDeleted = true;
+  }
   return isTasksDeleted;
 }
 
@@ -108,12 +110,19 @@ const deleteTasksByBoardId = async (boardId: string) => {
  * @param {number} userId - user's id
 */
 const updateTasksAfterUserDeleted = async (userId: string) => {
-  tasks.forEach(task => {
-    const taskObj = task;
-    if (task.userId === userId) {
-      taskObj.userId = null;
-    }
-  });
+
+  const taskRepo = getRepository(TaskEntity);
+  const foundTasks = await taskRepo.find({ 'userId': userId });
+
+  if (foundTasks.length) {
+    const taskPromisesArr = foundTasks.map(async (task) => {
+      task.userId = null!;
+      return await taskRepo.save(task);
+    })
+    await Promise.all(taskPromisesArr);
+  }
+
+
 }
 
 

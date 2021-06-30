@@ -2,6 +2,7 @@ import { IUser } from './../../interfaces/IUser';
 import { getRepository } from 'typeorm';
 import UserEntity from '../../entity/User';
 const User = require('./user.model');
+const tasksRepo = require('../tasks/task.memory.repository');
 
 
 const users: IUser[] = [];
@@ -55,6 +56,7 @@ const deleteUser = async (id: string) => {
   if (foundUser) {
     await userRepo.remove(foundUser);
     isUserDeleted = true;
+    await tasksRepo.updateTasksAfterUserDeleted(id);
   }
 
   return isUserDeleted;

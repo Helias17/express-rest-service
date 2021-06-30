@@ -1,5 +1,4 @@
 import { default as express, Response, Request, NextFunction } from 'express';
-import { createConnection } from 'typeorm';
 import swaggerUI from 'swagger-ui-express';
 import path from 'path';
 import YAML from 'yamljs';
@@ -10,8 +9,6 @@ import { taskRouter } from './resources/tasks/task.router';
 import { logRequest } from './middleware/logRequest';
 import { logger } from './services/logger';
 import { errorsMiddleware } from './middleware/errorsMiddleware';
-
-createConnection();
 
 export const app = express();
 

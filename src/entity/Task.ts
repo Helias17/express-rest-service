@@ -17,9 +17,9 @@ export default class TaskEntity {
   @Column({ nullable: true })
   userId!: string;
 
-  @Column()
+  @Column({ nullable: true })
   boardId!: string;
 
-  @Column()
+  @Column({ nullable: true })
   columnId!: string;
 }
