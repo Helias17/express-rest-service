@@ -21,7 +21,7 @@ router.route('/:id').get(authVerify, async (req: Request, res: Response, next: N
   }
 });
 
-router.route('/').post(async (req: Request, res: Response, next: NextFunction) => {
+router.route('/').post(authVerify, async (req: Request, res: Response, next: NextFunction) => {
   const createdUser = await usersService.createUser(req.body);
   if (createdUser) {
     res.status(201).json(createdUser);

@@ -1,7 +1,7 @@
-import { ErrorHandler } from './../services/errors/ErrorHandler';
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET_KEY } from '../common/config';
+import { ErrorHandler } from './../services/errors/ErrorHandler';
 
 export const authVerify = (req: Request, _res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization;
