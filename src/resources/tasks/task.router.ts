@@ -1,10 +1,11 @@
 import { Request, Response, Router, NextFunction } from 'express';
 import * as tasksService from './task.service';
 import { ErrorHandler } from '../../services/errors/ErrorHandler';
+import { authVerify } from '../../middleware/authVerify';
 
 const router = Router();
 
-router.route('/:id/tasks').post(async (req: Request, res: Response, next: NextFunction) => {
+router.route('/:id/tasks').post(authVerify, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.params['id']) {
     const err = new ErrorHandler(404, 'Wrong ID');
     next(err);
@@ -20,7 +21,7 @@ router.route('/:id/tasks').post(async (req: Request, res: Response, next: NextFu
   }
 });
 
-router.route('/:id/tasks').get(async (req: Request, res: Response, next: NextFunction) => {
+router.route('/:id/tasks').get(authVerify, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.params['id']) {
     const err = new ErrorHandler(404, 'Wrong ID');
     next(err);
@@ -35,7 +36,7 @@ router.route('/:id/tasks').get(async (req: Request, res: Response, next: NextFun
   }
 });
 
-router.route('/:boardId/tasks/:taskId').get(async (req: Request, res: Response, next: NextFunction) => {
+router.route('/:boardId/tasks/:taskId').get(authVerify, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.params['boardId'] || !req.params['taskId']) {
     const err = new ErrorHandler(404, 'Wrong boardId or taskId');
     next(err);
@@ -52,7 +53,7 @@ router.route('/:boardId/tasks/:taskId').get(async (req: Request, res: Response, 
 });
 
 
-router.route('/:boardId/tasks/:taskId').put(async (req: Request, res: Response, next: NextFunction) => {
+router.route('/:boardId/tasks/:taskId').put(authVerify, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.params['boardId'] || !req.params['taskId']) {
     const err = new ErrorHandler(404, 'Wrong boardId or taskId');
     next(err);
@@ -68,7 +69,7 @@ router.route('/:boardId/tasks/:taskId').put(async (req: Request, res: Response, 
   }
 });
 
-router.route('/:boardId/tasks/:taskId').delete(async (req: Request, res: Response, next: NextFunction) => {
+router.route('/:boardId/tasks/:taskId').delete(authVerify, async (req: Request, res: Response, next: NextFunction) => {
   if (!req.params['boardId'] || !req.params['taskId']) {
     const err = new ErrorHandler(404, 'Wrong boardId or taskId');
     next(err);
