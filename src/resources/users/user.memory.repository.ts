@@ -1,6 +1,7 @@
-import { IUser } from './../../interfaces/IUser';
 import { getRepository } from 'typeorm';
+import { IUser } from './../../interfaces/IUser';
 import UserEntity from '../../entity/User';
+const bcrypt = require('bcrypt');
 const User = require('./user.model');
 const tasksRepo = require('../tasks/task.memory.repository');
 
@@ -24,9 +25,14 @@ const getAllUsers = async () => {
  * @param {string} password - user's password
  * @returns {Object|undefined} return created user instance, if user was not found return undefined
 */
-const createUser = async (name: string, login: string, password: string) => {
+const createUser = async ({ name, login, password }: { name: string, login: string, password: string }) => {
+
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(password, saltRounds);
+  password = passwordHash;
+
   const userRepo = getRepository(UserEntity);
-  const newUser = new User(name, login, password);
+  const newUser = new User({ name, login, password });
   await userRepo.save(newUser);
   return User.toResponse(newUser);
 }
@@ -69,6 +75,14 @@ const deleteUser = async (id: string) => {
  * @returns {Object|null} return updated user or null, if user wasn't found
 */
 const updateUser = async (id: string, userInfo: IUser) => {
+  const saltRounds = 10;
+  const passwordHash = await new Promise((resolve, reject) => {
+    bcrypt.hash(userInfo.password, saltRounds, function (err: Error, hash: string) {
+      if (err) reject(err);
+      resolve(hash);
+    });
+  })
+
   const userRepo = getRepository(UserEntity);
 
   const foundUser = await userRepo.findOne({ 'id': id });
@@ -76,7 +90,7 @@ const updateUser = async (id: string, userInfo: IUser) => {
   if (foundUser) {
     foundUser.name = userInfo.name;
     foundUser.login = userInfo.login;
-    foundUser.password = userInfo.password;
+    foundUser.password = passwordHash as string;
     await userRepo.save(foundUser);
     return User.toResponse(foundUser);
   } else {
