@@ -1,9 +1,9 @@
+import { getRepository } from 'typeorm';
 import { IColumn } from './../../interfaces/IColumn';
-import { IBoard } from './../../interfaces/IBoard';
+import { BoardEntity } from '../../entity/Board';
 const Board = require('./board.model');
 const BoardColumn = require('./boardColumn.model');
-
-let boards: IBoard[] = [];
+const tasksRepo = require('../tasks/task.memory.repository');
 
 
 /** Create board in database 
@@ -12,9 +12,13 @@ let boards: IBoard[] = [];
  * @returns {Object} newBoard - created board instance
 */
 const createBoard = async ({ title, columns }: { title: string, columns: IColumn[] }) => {
+
+  const boardRepo = getRepository(BoardEntity);
+
   const columnsWithId = columns.map(column => new BoardColumn(column));
   const newBoard = new Board({ title, columnsWithId });
-  boards.push(newBoard);
+  await boardRepo.save(newBoard);
+
   return newBoard;
 }
 
@@ -22,46 +26,40 @@ const createBoard = async ({ title, columns }: { title: string, columns: IColumn
 /** get all boards 
  * @returns {array} boards - array of boards
 */
-const getAllBoards = async () => boards;
+const getAllBoards = async () => {
+  const boardRepo = getRepository(BoardEntity);
+  const allBoards = await boardRepo.find({ relations: ["columns"] })
+  return allBoards;
+}
 
 
 /** Get board by id
  * @param {number} id - The ID of the board
  * @returns {Object} board - found board
 */
-const getBoardById = async (id: string) => boards.find(board => board.id === id)
+const getBoardById = async (id: string) => {
+  const boardRepo = getRepository(BoardEntity);
+  const foundBoard = await boardRepo.findOne(id);
+  return foundBoard;
+}
 
 
 /** Update board information
  * @param {number} id - The ID of the board
  * @returns {Object} boardInfo - data to update the board
 */
-const updateBoard = async (id: string, boardInfo: IBoard) => {
+const updateBoard = async (id: string, boardInfo: BoardEntity) => {
 
-  const updateColumns = (board: IBoard, columnsUpdateArr: IColumn[]) => {
-    columnsUpdateArr.forEach(column => {
-      if (!board.columns || board.columns.length === 0) {
-        return;
-      }
+  const boardRepo = getRepository(BoardEntity);
+  const foundBoard = await boardRepo.findOne({ relations: ["columns"], where: { 'id': id } });
 
-      const columnForUpdate = board.columns.find(columnOld => columnOld.id === column.id);
-
-      if (typeof columnForUpdate === 'object') {
-        columnForUpdate!.title = column.title;
-        columnForUpdate!.order = column.order;
-      }
-    })
+  if (foundBoard) {
+    foundBoard.title = boardInfo.title;
+    foundBoard.columns = boardInfo.columns!;
+    await boardRepo.save(foundBoard);
+    return foundBoard;
   }
-
-  const boardArrIndex = boards.findIndex(item => item.id === id);
-
-  if (typeof boards[boardArrIndex] !== 'object' || !boardInfo.columns || boardInfo.columns.length === 0) {
-    return null;
-  } else {
-    boards[boardArrIndex]!.title = boardInfo.title;
-    updateColumns(boards[boardArrIndex]!, boardInfo.columns!);
-    return boards[boardArrIndex];
-  }
+  return null;
 }
 
 
@@ -70,19 +68,15 @@ const updateBoard = async (id: string, boardInfo: IBoard) => {
  * @returns {boolean} boolean - if boards was deleted return true
 */
 const deleteBoard = async (id: string) => {
-  const boardIndex = boards.findIndex(board => board.id === id);
-  if (boardIndex < 0) return false;
-
   let isBoardDeleted = false;
-  boards = boards.filter(board => {
 
-    if (board.id === id) {
-      isBoardDeleted = true;
-      return false;
-    }
-
-    return true;
-  });
+  const boardRepo = getRepository(BoardEntity);
+  const foundBoard = await boardRepo.findOne({ relations: ["columns"], where: { 'id': id } });
+  if (foundBoard) {
+    await boardRepo.remove(foundBoard);
+    await tasksRepo.deleteTasksByBoardId(id);
+    isBoardDeleted = true;
+  }
 
   return isBoardDeleted;
 }

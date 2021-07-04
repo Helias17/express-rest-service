@@ -2,6 +2,8 @@ import { default as express, Response, Request, NextFunction } from 'express';
 import swaggerUI from 'swagger-ui-express';
 import path from 'path';
 import YAML from 'yamljs';
+import cors from 'cors';
+import { loginRouter } from './resources/auth/auth.router';
 import { userRouter } from './resources/users/user.router';
 import { boardRouter } from './resources/boards/board.router';
 import { taskRouter } from './resources/tasks/task.router';
@@ -18,6 +20,7 @@ app.use(express.json());
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(logRequest);
+app.use(cors());
 
 app.use('/', (req: Request, res: Response, next: NextFunction) => {
   if (req.originalUrl === '/') {
@@ -27,6 +30,7 @@ app.use('/', (req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+app.use('/login', loginRouter);
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 app.use('/boards', taskRouter);
@@ -42,7 +46,7 @@ process.on('unhandledRejection', (err: Error) => {
   logger.log({ level: 'error', message: err.message, description: 'unhandled rejection' });
 })
 
-// throw new Error('Oops! uncaught Exception!');
+//  throw new Error('Oops! uncaught Exception!');  
 
 //Promise.reject(new Error('Oops! unhandledRejection!'));
 

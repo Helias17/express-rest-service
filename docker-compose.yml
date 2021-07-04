@@ -1,6 +1,33 @@
 version: '3.8'
 
 services:
+  postgres:
+    container_name: "postgres_basics"
+    image: postgres:alpine
+    env_file:
+      - .env
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
+    ports:
+    - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    networks:
+      - docker-basics
+    restart: on-failure
+
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    ports:
+      - 1111:80
+    networks:
+      - docker-basics
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      
   node-app:
     container_name: "node-app-basics"
     build: .
@@ -17,18 +44,6 @@ services:
     restart: on-failure
     networks:
       - docker-basics
-  postgres:
-    container_name: "postgres_bacics"
-    image: postgres:alpine
-    env_file:
-      - .env
-    volumes:
-      - ./database:/var/lib/postgresql
-    ports:
-    - ${POSTGRES_PORT}:${POSTGRES_PORT}
-    networks:
-      - docker-basics
-    restart: on-failure
 
 networks:
   docker-basics:
