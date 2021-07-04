@@ -1,0 +1,9 @@
+.git
+.github
+.vscode
+logs
+node_modules
+database
+src
+out
+.env
