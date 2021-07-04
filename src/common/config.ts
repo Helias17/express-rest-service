@@ -10,4 +10,5 @@ export const {
   NODE_ENV,
   MONGO_CONNECTION_STRING,
   JWT_SECRET_KEY,
+  LOGS_FOLDER,
   AUTH_MODE } = process.env;

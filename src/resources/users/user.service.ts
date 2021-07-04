@@ -4,8 +4,9 @@ const usersRepo = require('./user.memory.repository');
 const User = require('./user.model');
 
 
+
 /** get all users
- * @returns {array} return array of user's instances
+ * @returns {Promise<array>} return array of user's instances
 */
 
 const getAllUsers = async () => {
