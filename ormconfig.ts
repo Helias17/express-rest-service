@@ -7,7 +7,7 @@ export default {
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
   database: POSTGRES_DB,
-  synchronize: true,
+  synchronize: false,
   logging: false,
   entities: [
     "src/entity/**/*.ts"
