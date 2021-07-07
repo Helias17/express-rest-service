@@ -2,12 +2,12 @@ import { POSTGRES_PORT, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB } from './
 
 export default {
   type: "postgres",
-  host: "host.docker.internal",
+  host: "localhost",
   port: POSTGRES_PORT,
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
   database: POSTGRES_DB,
-  synchronize: false,
+  synchronize: true,
   logging: false,
   entities: [
     "src/entity/**/*.ts"
