@@ -7,7 +7,6 @@ export const createTables = async () => {
   const queryRunner: QueryRunner = connection.createQueryRunner();
   await queryRunner.connect();
   const tables = await queryRunner.getTables(['Columns', 'Boards', 'Users', 'Tasks']);
-  console.log(tables);
 
   if (!tables.length) {
     const trelloMigration = new Migration();

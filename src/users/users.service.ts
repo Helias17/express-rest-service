@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import UserEntity from '../entity/User';
 import { IUser } from '../interfaces/IUser';
+import { TasksService } from '../tasks/tasks.service';
 
 const bcrypt = require('bcrypt');
 
@@ -14,6 +15,9 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private usersRepository: Repository<UserEntity>,
+
+    @Inject('TasksService')
+    private readonly tasksService: TasksService
   ) { }
 
   async getAll(): Promise<IUser[] | null> {
@@ -57,7 +61,9 @@ export class UsersService {
     if (foundUser) {
       await this.usersRepository.remove(foundUser);
       isUserDeleted = true;
-      //await tasksRepo.updateTasksAfterUserDeleted(id);
+
+      // updateTasksAfterUserDeleted
+      await this.tasksService.updateTasksAfterUserDeleted(id)
     }
 
     return isUserDeleted;
