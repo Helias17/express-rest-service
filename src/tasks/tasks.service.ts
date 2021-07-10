@@ -41,12 +41,10 @@ export class TasksService {
 
   async remove(boardId: string, taskId: string): Promise<Boolean> {
     const foundTask = await this.tasksRepository.findOne({ 'boardId': boardId, id: taskId });
-
     if (foundTask) {
       await this.tasksRepository.remove(foundTask);
       return true;
     }
-
     return false;
   }
 
@@ -68,7 +66,7 @@ export class TasksService {
     return null;
   }
 
-  async updateTasksAfterUserDeleted(userId: string) {
+  async updateTasksAfterUserDeleted(userId: string): Promise<Boolean> {
     const foundTasks = await this.tasksRepository.find({ 'userId': userId });
 
     if (foundTasks.length) {
@@ -77,18 +75,21 @@ export class TasksService {
         return await this.tasksRepository.save(task);
       })
       await Promise.all(taskPromisesArr);
+      return true;
     }
+
+    return false;
+
   }
 
   async deleteTasksByBoardId(boardId: string) {
-
     let isTasksDeleted = false;
 
     const foundTasks = await this.tasksRepository.find({ 'boardId': boardId });
 
     if (foundTasks.length) {
       const taskPromisesArr = foundTasks.map(async (task) => {
-        return await this.tasksRepository.remove(task);
+        return this.tasksRepository.remove(task);
       })
       await Promise.all(taskPromisesArr);
       isTasksDeleted = true;

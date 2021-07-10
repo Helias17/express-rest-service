@@ -1,5 +1,6 @@
-import { HttpStatus, HttpException } from '@nestjs/common';
 import {
+  HttpStatus,
+  HttpException,
   Controller,
   Get,
   Param,
@@ -27,7 +28,8 @@ export class TasksController {
 
   @Get()
   async getAll(@Param('boardId') boardId: string): Promise<ITask[] | null> {
-    return await this.tasksService.getAll(boardId);
+    const foundTasks = await this.tasksService.getAll(boardId);
+    return foundTasks;
   }
 
   @Get(':taskId')
@@ -35,7 +37,13 @@ export class TasksController {
     @Param('boardId') boardId: string,
     @Param('taskId') taskId: string
   ): Promise<ITask | null> {
-    return await this.tasksService.getById(boardId, taskId);
+    const foundTask = await this.tasksService.getById(boardId, taskId);
+    if (foundTask) {
+      return foundTask;
+    } else {
+      throw new HttpException('Task was not found', HttpStatus.NOT_FOUND);
+    }
+
   }
 
   @Delete(':taskId')
@@ -44,6 +52,9 @@ export class TasksController {
     @Param('boardId') boardId: string,
     @Param('taskId') taskId: string
   ): Promise<String> {
+    if (!boardId || !taskId) {
+      throw new HttpException('Wrong boardId or taskId', HttpStatus.NOT_FOUND);
+    }
     const isTaskDeleted = await this.tasksService.remove(boardId, taskId);
     if (isTaskDeleted) {
       return 'OK';

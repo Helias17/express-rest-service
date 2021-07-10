@@ -61,9 +61,7 @@ export class UsersService {
     if (foundUser) {
       await this.usersRepository.remove(foundUser);
       isUserDeleted = true;
-
-      // updateTasksAfterUserDeleted
-      await this.tasksService.updateTasksAfterUserDeleted(id)
+      await this.tasksService.updateTasksAfterUserDeleted(id);
     }
 
     return isUserDeleted;

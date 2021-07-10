@@ -32,7 +32,12 @@ export default class BoardsController {
 
   @Get(':id')
   async getOne(@Param('id') id: string): Promise<IBoard | null> {
-    return await this.boardsService.getById(id);
+    const foundBoard = await this.boardsService.getById(id);
+    if (foundBoard) {
+      return foundBoard;
+    } else {
+      throw new HttpException('Board was not found', HttpStatus.NOT_FOUND);
+    }
   }
 
   @Delete(':id')
