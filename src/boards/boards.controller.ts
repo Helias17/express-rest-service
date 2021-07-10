@@ -1,4 +1,4 @@
-import { HttpStatus } from '@nestjs/common';
+import { HttpStatus, HttpException } from '@nestjs/common';
 import {
   Controller,
   Get,
@@ -21,32 +21,39 @@ export default class BoardsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED) // response status code
-  create(@Body() createBoardDto: CreateBoardDto): Promise<IBoard> {
-    return this.boardsService.create(createBoardDto);
+  async create(@Body() createBoardDto: CreateBoardDto): Promise<IBoard> {
+    return await this.boardsService.create(createBoardDto);
   }
 
   @Get()
-  getAll(): Promise<IBoard[] | null> {
-    return this.boardsService.getAll();
+  async getAll(): Promise<IBoard[] | null> {
+    return await this.boardsService.getAll();
   }
 
   @Get(':id')
-  getOne(@Param('id') id: string): Promise<IBoard | null> {
-    return this.boardsService.getById(id);
+  async getOne(@Param('id') id: string): Promise<IBoard | null> {
+    return await this.boardsService.getById(id);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string): Promise<Boolean> {
-    return this.boardsService.remove(id);
+  async remove(@Param('id') id: string): Promise<String> {
+    const isBoardDeleted = await this.boardsService.remove(id);
+
+    if (isBoardDeleted) {
+      return 'The board has been deleted';
+    } else {
+      throw new HttpException('Board was not found', HttpStatus.NOT_FOUND);
+    }
+
   }
 
   @Put(':id')
-  update(
+  async update(
     @Body() updateBoardDto: UpdateBoardDto,
     @Param('id') id: string,
   ): Promise<IBoard | null> {
-    return this.boardsService.update(id, updateBoardDto);
+    return await this.boardsService.update(id, updateBoardDto);
   }
 
 }

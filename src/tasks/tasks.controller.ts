@@ -1,4 +1,4 @@
-import { HttpStatus } from '@nestjs/common';
+import { HttpStatus, HttpException } from '@nestjs/common';
 import {
   Controller,
   Get,
@@ -21,40 +21,45 @@ export class TasksController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED) // response status code
-  create(@Param('boardId') boardId: string, @Body() createTaskDto: CreateTaskDto): Promise<ITask> {
-    return this.tasksService.create(boardId, createTaskDto);
+  async create(@Param('boardId') boardId: string, @Body() createTaskDto: CreateTaskDto): Promise<ITask> {
+    return await this.tasksService.create(boardId, createTaskDto);
   }
 
   @Get()
-  getAll(@Param('boardId') boardId: string): Promise<ITask[] | null> {
-    return this.tasksService.getAll(boardId);
+  async getAll(@Param('boardId') boardId: string): Promise<ITask[] | null> {
+    return await this.tasksService.getAll(boardId);
   }
 
   @Get(':taskId')
-  getOne(
+  async getOne(
     @Param('boardId') boardId: string,
     @Param('taskId') taskId: string
   ): Promise<ITask | null> {
-    return this.tasksService.getById(boardId, taskId);
+    return await this.tasksService.getById(boardId, taskId);
   }
 
   @Delete(':taskId')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(
+  async remove(
     @Param('boardId') boardId: string,
     @Param('taskId') taskId: string
-  ): Promise<Boolean> {
-    return this.tasksService.remove(boardId, taskId);
+  ): Promise<String> {
+    const isTaskDeleted = await this.tasksService.remove(boardId, taskId);
+    if (isTaskDeleted) {
+      return 'OK';
+    } else {
+      throw new HttpException('Task was not found', HttpStatus.NOT_FOUND);
+    }
   }
 
 
   @Put(':taskId')
-  update(
+  async update(
     @Param('boardId') boardId: string,
     @Param('taskId') taskId: string,
     @Body() updateUserDto: UpdateTaskDto,
   ): Promise<ITask | null> {
-    return this.tasksService.update(boardId, taskId, updateUserDto);
+    return await this.tasksService.update(boardId, taskId, updateUserDto);
   }
 
 }

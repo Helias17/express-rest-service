@@ -20,37 +20,37 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Get()
-  getAll(): Promise<IUser[] | null> {
-    return this.usersService.getAll();
+  async getAll(): Promise<IUser[] | null> {
+    return await this.usersService.getAll();
   }
 
 
   @Get(':id')
-  getOne(@Param('id') id: string): Promise<IUser | null> {
-    return this.usersService.getById(id);
+  async getOne(@Param('id') id: string): Promise<IUser | null> {
+    return await this.usersService.getById(id);
   }
 
 
   @Post()
   @HttpCode(HttpStatus.CREATED) // response status code
-  create(@Body() createUserDto: CreateUserDto): Promise<IUser> {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto): Promise<IUser> {
+    return await this.usersService.create(createUserDto);
   }
 
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string): Promise<Boolean> {
-    return this.usersService.remove(id);
+  async remove(@Param('id') id: string): Promise<Boolean> {
+    return await this.usersService.remove(id);
   }
 
 
   @Put(':id')
-  update(
+  async update(
     @Body() updateUserDto: UpdateUserDto,
     @Param('id') id: string,
   ): Promise<IUser | null> {
-    return this.usersService.update(id, updateUserDto);
+    return await this.usersService.update(id, updateUserDto);
   }
 
 }
