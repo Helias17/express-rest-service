@@ -39,6 +39,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     response
       .status(status)
-      .json(resObj);
+      .send(resObj);
   }
 }

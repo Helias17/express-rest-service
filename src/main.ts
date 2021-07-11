@@ -1,14 +1,27 @@
 import { NestFactory } from '@nestjs/core';
+import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { SwaggerModule } from '@nestjs/swagger';
 import YAML from 'yamljs';
 import path from 'path';
 import { AppModule } from './app.module';
-import { PORT } from './common/config';
+import { PORT, USE_FASTIFY } from './common/config';
 import { createTables } from './utils/createTables';
 import { uncaughtErrorLogger } from './utils/uncaughtErrorLogger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+
+  /*   let app;
+    if (USE_FASTIFY) {
+      console.log('USE_FASTIFY' + USE_FASTIFY);
+      app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter({ ignoreTrailingSlash: true }));
+    } else {
+      app = await NestFactory.create(AppModule);
+    }
+   */
+  const app = !USE_FASTIFY ?
+    await NestFactory.create(AppModule) :
+    await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter({ ignoreTrailingSlash: true }));
+
   await createTables();
 
   const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));

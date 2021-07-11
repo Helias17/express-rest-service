@@ -7,7 +7,6 @@ import {
   Body,
   Delete,
   Put,
-  HttpCode,
 } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
@@ -21,7 +20,6 @@ export default class BoardsController {
   constructor(private readonly boardsService: BoardsService) { }
 
   @Post()
-  @HttpCode(HttpStatus.CREATED)
   async create(@Body() createBoardDto: CreateBoardDto): Promise<IBoard> {
     return await this.boardsService.create(createBoardDto);
   }
@@ -42,7 +40,6 @@ export default class BoardsController {
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string): Promise<String> {
     const isBoardDeleted = await this.boardsService.remove(id);
 

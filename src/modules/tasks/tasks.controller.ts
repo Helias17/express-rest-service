@@ -8,7 +8,6 @@ import {
   Body,
   Delete,
   Put,
-  HttpCode,
   UseGuards,
 } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -23,7 +22,6 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) { }
 
   @Post()
-  @HttpCode(HttpStatus.CREATED)
   async create(@Param('boardId') boardId: string, @Body() createTaskDto: CreateTaskDto): Promise<ITask> {
     return await this.tasksService.create(boardId, createTaskDto);
   }
@@ -49,7 +47,6 @@ export class TasksController {
   }
 
   @Delete(':taskId')
-  @HttpCode(HttpStatus.NO_CONTENT)
   async remove(
     @Param('boardId') boardId: string,
     @Param('taskId') taskId: string

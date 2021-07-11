@@ -26,7 +26,7 @@ export class LoggerMiddleware implements NestMiddleware {
           level: 'info',
           message: res.statusMessage,
           Date: logDate,
-          URL: req.baseUrl + url,
+          URL: url,
           Method: method,
           Body: body,
           Params: params,
