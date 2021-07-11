@@ -27,23 +27,6 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-      
-  node-app:
-    container_name: "node-app-basics"
-    build: .
-    image: "x264co/docker-basics"
-    ports:
-      - ${PORT}:${PORT}
-    env_file:
-      - .env
-    depends_on:
-      - postgres
-    volumes:
-      - ./logs:/usr/app/logs
-      - ./src:/usr/app/src
-    restart: on-failure
-    networks:
-      - docker-basics
 
 networks:
   docker-basics:

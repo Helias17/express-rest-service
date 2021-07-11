@@ -3,8 +3,7 @@ import path from 'path';
 import { LOGS_FOLDER } from '../common/config';
 
 
-
-export const logger = winston.createLogger({
+export const winstonOptions = {
   format: format.combine(
     format.json(),
     format.prettyPrint()
@@ -25,5 +24,4 @@ export const logger = winston.createLogger({
     }),
   ]
 
-});
-
+}

@@ -12,7 +12,7 @@ import { TasksService } from './../tasks/tasks.service';
     TypeOrmModule.forFeature([BoardEntity]),
     TasksModule
   ],
-  providers: [BoardsService, TasksService], //
+  providers: [BoardsService, TasksService],
   controllers: [BoardsController],
 })
 export class BoardsModule { }

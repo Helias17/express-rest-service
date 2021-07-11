@@ -1,8 +1,8 @@
 import { getConnection } from 'typeorm';
 import UserEntity from '../entity/User';
+import { User } from '../modules/users/users.model';
 
 const bcrypt = require('bcrypt');
-const User = require('../resources/users/user.model');
 
 export const createUserAdmin = async () => {
   const saltRounds = 10;

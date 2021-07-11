@@ -1,12 +1,23 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
-import { /* Request ,*/ Response } from 'express';
+import {
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  HttpException,
+  HttpStatus,
+  Inject,
+  LoggerService
+} from '@nestjs/common';
+import { Request, Response } from 'express';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  catch(exception: HttpException, host: ArgumentsHost) {
+  constructor(@Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService) { }
+
+  catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    // const request = ctx.getRequest<Request>();
+    const request = ctx.getRequest<Request>();
     let status, message;
 
     if (exception instanceof HttpException) {
@@ -19,11 +30,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     const resObj = {
       statusCode: status,
-      // timestamp: new Date().toISOString(),
-      // path: request.url,
+      timestamp: new Date().toISOString(),
+      path: request.url,
       message
     }
-    console.log(resObj);
+
+    this.logger.error({ level: 'error', ...resObj });
 
     response
       .status(status)

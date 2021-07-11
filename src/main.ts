@@ -5,6 +5,7 @@ import path from 'path';
 import { AppModule } from './app.module';
 import { PORT } from './common/config';
 import { createTables } from './utils/createTables';
+import { uncaughtErrorLogger } from './utils/uncaughtErrorLogger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,4 +18,17 @@ async function bootstrap() {
 }
 bootstrap();
 
+
+process.on('uncaughtException', (err: Error) => {
+  uncaughtErrorLogger.error({ level: 'error', message: err.message, description: 'uncaught exception' });
+});
+
+
+process.on('unhandledRejection', (err: Error) => {
+  uncaughtErrorLogger.error({ level: 'error', message: err.message, description: 'unhandled rejection' });
+})
+
+
 // throw new Error('Oops! uncaught Exception!');
+
+// Promise.reject(new Error('Oops! unhandledRejection!'));

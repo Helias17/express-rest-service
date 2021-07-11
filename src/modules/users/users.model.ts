@@ -1,7 +1,7 @@
 import { IUser } from "../../interfaces/IUser";
 import { v4 as uuidv4 } from 'uuid';
 
-class User {
+export class User {
   id: string;
 
   name: string;
@@ -28,4 +28,3 @@ class User {
   }
 }
 
-module.exports = User;

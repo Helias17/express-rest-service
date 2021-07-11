@@ -10,24 +10,20 @@ import {
   Put,
   HttpCode,
   UseGuards,
-  UseFilters
 } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TasksService } from './tasks.service';
 import { ITask } from './../../interfaces/ITask';
 import { AuthGuard } from '../../guards/auth.guard';
-import { HttpExceptionFilter } from '../../filters/http-exception.filter';
-
 
 @Controller('boards/:boardId/tasks')
-@UseFilters(new HttpExceptionFilter())
 @UseGuards(AuthGuard)
 export class TasksController {
   constructor(private readonly tasksService: TasksService) { }
 
   @Post()
-  @HttpCode(HttpStatus.CREATED) // response status code
+  @HttpCode(HttpStatus.CREATED)
   async create(@Param('boardId') boardId: string, @Body() createTaskDto: CreateTaskDto): Promise<ITask> {
     return await this.tasksService.create(boardId, createTaskDto);
   }

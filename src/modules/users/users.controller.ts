@@ -1,4 +1,4 @@
-import { HttpStatus, UseGuards, UseFilters } from '@nestjs/common';
+import { HttpStatus, UseGuards } from '@nestjs/common';
 import {
   Controller,
   Get,
@@ -14,12 +14,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 import { IUser } from '../../interfaces/IUser';
 import { AuthGuard } from '../../guards/auth.guard';
-import { HttpExceptionFilter } from '../../filters/http-exception.filter';
-
 
 @Controller('users')
 @UseGuards(AuthGuard)
-@UseFilters(new HttpExceptionFilter())
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
@@ -36,7 +33,7 @@ export class UsersController {
 
 
   @Post()
-  @HttpCode(HttpStatus.CREATED) // response status code
+  @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto): Promise<IUser> {
     return await this.usersService.create(createUserDto);
   }
