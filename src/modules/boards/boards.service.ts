@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
-import { BoardEntity } from '../entity/Board';
-import { IBoard } from '../interfaces/IBoard';
+import { BoardEntity } from '../../entity/Board';
+import { IBoard } from '../../interfaces/IBoard';
 import { TasksService } from './../tasks/tasks.service';
 
 

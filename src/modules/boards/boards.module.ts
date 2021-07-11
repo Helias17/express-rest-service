@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import BoardsController from './boards.controller';
 import { BoardsService } from './boards.service';
-import { BoardEntity } from '../entity/Board';
+import { BoardEntity } from '../../entity/Board';
 import TasksModule from '../tasks/tasks.module';
 import { TasksService } from './../tasks/tasks.service';
 

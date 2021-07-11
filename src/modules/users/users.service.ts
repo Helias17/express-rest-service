@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import UserEntity from '../entity/User';
-import { IUser } from '../interfaces/IUser';
+import UserEntity from '../../entity/User';
+import { IUser } from '../../interfaces/IUser';
 import { TasksService } from '../tasks/tasks.service';
 
 const bcrypt = require('bcrypt');
@@ -80,5 +80,14 @@ export class UsersService {
     }
     return null;
   }
+
+  async getByLogin(login: string): Promise<UserEntity | null> {
+    const userByLogin = await this.usersRepository.findOne({ login });
+    if (userByLogin) {
+      return userByLogin;
+    }
+    return null;
+  }
+
 
 }

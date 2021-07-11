@@ -1,6 +1,6 @@
-import { BoardColumnEntity } from '../../entity/Column';
+import { BoardColumnEntity } from '../../../entity/Column';
 
-export class CreateBoardDto {
+export class UpdateBoardDto {
   readonly title: string;
   readonly columns: BoardColumnEntity[];
 

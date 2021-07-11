@@ -12,7 +12,7 @@ import {
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { BoardsService } from './boards.service';
-import { IBoard } from '../interfaces/IBoard';
+import { IBoard } from '../../interfaces/IBoard';
 
 
 @Controller('boards')

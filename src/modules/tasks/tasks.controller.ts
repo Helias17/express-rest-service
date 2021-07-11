@@ -13,7 +13,7 @@ import {
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TasksService } from './tasks.service';
-import { ITask } from './../interfaces/ITask';
+import { ITask } from './../../interfaces/ITask';
 
 
 @Controller('boards/:boardId/tasks')
