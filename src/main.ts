@@ -16,3 +16,5 @@ async function bootstrap() {
   await app.listen(PORT!);
 }
 bootstrap();
+
+// throw new Error('Oops! uncaught Exception!');

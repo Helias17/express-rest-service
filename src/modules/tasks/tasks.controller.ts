@@ -9,16 +9,19 @@ import {
   Delete,
   Put,
   HttpCode,
-  UseGuards
+  UseGuards,
+  UseFilters
 } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TasksService } from './tasks.service';
 import { ITask } from './../../interfaces/ITask';
 import { AuthGuard } from '../../guards/auth.guard';
+import { HttpExceptionFilter } from '../../filters/http-exception.filter';
 
 
 @Controller('boards/:boardId/tasks')
+@UseFilters(new HttpExceptionFilter())
 @UseGuards(AuthGuard)
 export class TasksController {
   constructor(private readonly tasksService: TasksService) { }
