@@ -10,14 +10,6 @@ import { uncaughtErrorLogger } from './utils/uncaughtErrorLogger';
 
 async function bootstrap() {
 
-  /*   let app;
-    if (USE_FASTIFY) {
-      console.log('USE_FASTIFY' + USE_FASTIFY);
-      app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter({ ignoreTrailingSlash: true }));
-    } else {
-      app = await NestFactory.create(AppModule);
-    }
-   */
   const app = !USE_FASTIFY ?
     await NestFactory.create(AppModule) :
     await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter({ ignoreTrailingSlash: true }));
