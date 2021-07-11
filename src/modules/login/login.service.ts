@@ -29,7 +29,7 @@ export class LoginService {
     const isPasswordValid = await bcrypt.compare(loginData.password, user.password);
     if (isPasswordValid) {
       const payload = { login: user.login, id: user.id };
-      const token = jwt.sign(payload, JWT_SECRET_KEY!, { expiresIn: 60 });
+      const token = jwt.sign(payload, JWT_SECRET_KEY!, { expiresIn: 600 });
       return { token };
     } else {
       throw new HttpException('Invalid password', HttpStatus.FORBIDDEN);

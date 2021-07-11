@@ -1,4 +1,4 @@
-import { HttpStatus, HttpException } from '@nestjs/common';
+import { HttpStatus, HttpException, UseGuards } from '@nestjs/common';
 import {
   Controller,
   Get,
@@ -13,9 +13,11 @@ import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { BoardsService } from './boards.service';
 import { IBoard } from '../../interfaces/IBoard';
+import { AuthGuard } from '../../guards/auth.guard';
 
 
 @Controller('boards')
+@UseGuards(AuthGuard)
 export default class BoardsController {
   constructor(private readonly boardsService: BoardsService) { }
 
